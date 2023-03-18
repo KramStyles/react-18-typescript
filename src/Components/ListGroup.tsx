@@ -1,19 +1,25 @@
 import { MouseEvent, useState } from "react";
 
-let places = ["new york", "san francisco", "los angeles"];
-
 const HandleClick = (event: MouseEvent) => {
   console.log(event);
 };
 
-const ListGroup = () => {
+// Using interface to set the type of props expected
+interface ListProps {
+  items: string[];
+  title: string;
+  // function that collects string and returns none
+  onSelectItem: (item: string) => void;
+}
+
+const ListGroup = (props: ListProps) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   return (
     <>
-      <h1>List Group</h1>
-      {places.length === 0 && <p>No places to explore!</p>}
-      <ul className={"list-group"}>
-        {places.map((place, index) => (
+      <h1 className={"text-uppercase mt-3"}>{props.title}</h1>
+      {props.items.length === 0 && <p>No places to explore!</p>}
+      <ul className={"list-group container my-3"}>
+        {props.items.map((item, index) => (
           <li
             className={
               selectedIndex === index
@@ -23,9 +29,10 @@ const ListGroup = () => {
             key={index}
             onClick={() => {
               setSelectedIndex(index);
+              props.onSelectItem(item);
             }}
           >
-            {place}
+            {item}
           </li>
         ))}
       </ul>
